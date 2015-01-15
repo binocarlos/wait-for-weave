@@ -16,7 +16,7 @@ First - run the wait-for-weave container ensuring you provide a `--name` paramet
 $ docker run --name weavetools binocarlos/wait-for-weave
 ```
 
-Then - you can run another container with a `--volumes-from weavetools` option.
+Then - you can run another container with a `--volumes-from=weavetools` option.
 
 This enables you change the `--entrypoint` to `/home/weavetools/wait-for-weave`.
 
