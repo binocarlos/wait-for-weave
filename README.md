@@ -25,7 +25,7 @@ Pass the original entrypoint as arguments and it will run only once the weave ne
 ```bash
 $ docker run \
     --volumes-from=weavetools \
-    --entrypoiint="/home/weavetools/wait-for-weave" \
+    --entrypoint="/home/weavetools/wait-for-weave" \
     binocarlos/database-backup /bin/backup.sh --server 10.255.0.1
 ```
 
