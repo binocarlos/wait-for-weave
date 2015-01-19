@@ -41,6 +41,30 @@ The job of identifying and modifying the container entrypoint and adding the `--
 
 If the `ethwe` interface is not found within 10 seconds then `wait-for-weave` will NOT execute the entrypoint, will print a message to `stderr` and exit with a non-zero exit code.
 
+## example usage
+
+The command I ran without weave (where wait-for-weave lived in /srv/projects):
+
+```bash
+$ docker run \
+  -v /srv/projects/wait-for-weave/stage/wait-for-weave:/bin/wait-for-weave \
+  --entrypoint="/bin/wait-for-weave" \
+  ubuntu bash -c "while true; do echo hello && sleep 1; done"
+```
+
+This printed `interface ethwe not found after 10 seconds`
+
+The command I ran with weave:
+
+```bash
+$ sudo weave run 10.255.0.14/8 \
+  -v /srv/projects/wait-for-weave/stage/wait-for-weave:/bin/wait-for-weave \
+  --entrypoint="/bin/wait-for-weave" \
+  ubuntu bash -c "while true; do echo hello && sleep 1; done"
+```
+
+This printed the container id and when I `docker logs $ID` it was printing hello lots of times (i.e. it found ethwe and ran the entrypoint)
+
 ## License
 
 MIT
