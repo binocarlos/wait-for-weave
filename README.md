@@ -29,7 +29,7 @@ $ docker run \
     binocarlos/database-backup /bin/backup.sh --server 10.255.0.1
 ```
 
-In the example above - the original docker command without wait-for-weave was - the containers entrypoint is `/bin/backup.sh`:
+In the example above - the containers entrypoint is `/bin/backup.sh` and the original docker command without wait-for-weave was:
 
 ```bash
 $ docker run binocarlos/database-backup --server 10.255.0.1
