@@ -35,7 +35,7 @@ In the example above - the containers entrypoint is `/bin/backup.sh` and the ori
 $ docker run binocarlos/database-backup --server 10.255.0.1
 ```
 
-The job of identifying and modifying the container entrypoint is not in the scope of this repository.
+The job of identifying and modifying the container entrypoint and adding the `--volumes-from` flag is not in the scope of this project.  This is much better handled by a docker proxy or similar tool.
 
 ## License
 
