@@ -8,7 +8,7 @@ Useful when overriding a docker container entrypoint such that the container wil
 
 wait-for-weave is not designed to be run as a stand alone container.
 
-It is intended to have it's volumes mounted onto another container using `--volunes-from`.
+It is intended to have it's volumes mounted onto another container using `--volumes-from`.
 
 First - run the wait-for-weave container ensuring you provide a `--name` parameter:
 
