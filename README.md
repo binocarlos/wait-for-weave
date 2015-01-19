@@ -37,6 +37,10 @@ $ docker run binocarlos/database-backup --server 10.255.0.1
 
 The job of identifying and modifying the container entrypoint and adding the `--volumes-from` flag is not in the scope of this project.  This is much better handled by a docker proxy or similar tool.
 
+## exit code
+
+If the `ethwe` interface is not found within 10 seconds then `wait-for-weave` will NOT execute the entrypoint, will print a message to `stderr` and exit with a non-zero exit code.
+
 ## License
 
 MIT

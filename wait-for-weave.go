@@ -33,10 +33,16 @@ func runEntryPoint() {
   cmd.Run()
 }
 
+/*
+
+  If the ethwe interface is not found after 10 seconds then write to stderr and exit with non-zero code
+  
+*/
 func main() {
   if _, err := net.EnsureInterface(WEAVE_INTERFACE_NAME, WAIT_FOR_SECONDS); err != nil {
     a := fmt.Sprint("interface ", WEAVE_INTERFACE_NAME, " not found after ", WAIT_FOR_SECONDS, " seconds")
     fmt.Fprintln(os.Stderr, a)
+    os.Exit(1)
   } else {
     runEntryPoint()
   }
