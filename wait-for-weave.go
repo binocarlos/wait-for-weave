@@ -3,11 +3,12 @@ package main
 import (
   "os"
   "os/exec"
-  "io/ioutil"
-  "time"
+  "fmt"
+  "github.com/zettio/weave/net"
 )
 
-const WEAVE_CARRIER_PATH = "/sys/class/net/ethwe/carrier"
+const WEAVE_INTERFACE_NAME = "ethwe"
+const WAIT_FOR_SECONDS = 10
 
 /*
 
@@ -32,48 +33,11 @@ func runEntryPoint() {
   cmd.Run()
 }
 
-/*
-
-  check to see if the weave network is ready
-  we do this by checking the path:
-
-  /sys/class/net/ethwe/carrier
-
-  to see if it contains "1"
-
-  
-*/
-func isWeaveReady() bool {
-  if _, err := os.Stat(WEAVE_CARRIER_PATH); os.IsNotExist(err) {
-    return false
-  } else {
-    bytes, err := ioutil.ReadFile(WEAVE_CARRIER_PATH)
-    if err != nil {
-      return false
-    }
-    if(string(bytes[0]) == "1"){
-      return true
-    } else {
-      return false
-    }
-  }
-}
-
-/*
-
-  run isWeaveReady continously until it returns true
-
-  wait for 1 second inbetween attempts
-  
-*/
-func waitForWeave(){
-  for !isWeaveReady() {
-    time.Sleep(1 * time.Second)
-  }
-  return
-}
-
 func main() {
-  waitForWeave()
-  runEntryPoint()
+  if _, err := net.EnsureInterface(WEAVE_INTERFACE_NAME, WAIT_FOR_SECONDS); err != nil {
+    a := fmt.Sprint("interface ", WEAVE_INTERFACE_NAME, " not found after ", WAIT_FOR_SECONDS, " seconds")
+    fmt.Fprintln(os.Stderr, a)
+  } else {
+    runEntryPoint()
+  }
 }
