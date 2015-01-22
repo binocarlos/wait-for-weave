@@ -15,7 +15,7 @@ First - run the wait-for-weave container ensuring you provide a `--name` paramet
 ```bash
 $ docker run --name weavewait \
   -e "WAIT_FOR_WEAVE_QUIT=yes" \
-  binocarlos/wait-for-weave /home/weavewait/wait-for-weave
+  binocarlos/wait-for-weave
 ```
 
 The `WAIT_FOR_WEAVE_QUIT` variable enables us to run the binary but without waiting - otherwise docker complains that we have no given it a command to run.
