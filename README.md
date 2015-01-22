@@ -13,23 +13,23 @@ It is intended to have it's volumes mounted onto another container using `--volu
 First - run the wait-for-weave container ensuring you provide a `--name` parameter and a `WAIT_FOR_WEAVE_QUIT=yes` environment variable.
 
 ```bash
-$ docker run --name weavetools \
+$ docker run --name weavewait \
   -e "WAIT_FOR_WEAVE_QUIT=yes" \
-  binocarlos/wait-for-weave /home/weavetools/wait-for-weave
+  binocarlos/wait-for-weave /home/weavewait/wait-for-weave
 ```
 
 The `WAIT_FOR_WEAVE_QUIT` variable enables us to run the binary but without waiting - otherwise docker complains that we have no given it a command to run.
 
-Then - you can run another container with a `--volumes-from=weavetools` option.
+Then - you can run another container with a `--volumes-from=weavewait` option.
 
-This enables you change the `--entrypoint` to `/home/weavetools/wait-for-weave`.
+This enables you change the `--entrypoint` to `/home/weavewait/wait-for-weave`.
 
 Pass the original entrypoint as arguments and it will run only once the weave network is up and running:
 
 ```bash
 $ docker run \
-    --volumes-from=weavetools \
-    --entrypoint="/home/weavetools/wait-for-weave" \
+    --volumes-from=weavewait \
+    --entrypoint="/home/weavewait/wait-for-weave" \
     binocarlos/database-backup /bin/backup.sh --server 10.255.0.1
 ```
 
