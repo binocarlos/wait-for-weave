@@ -9,6 +9,7 @@ import (
 
 const WEAVE_INTERFACE_NAME = "ethwe"
 const WAIT_FOR_SECONDS = 10
+const QUIT_IMMEDIATELY_VAR = "WAIT_FOR_WEAVE_QUIT"
 
 /*
 
@@ -39,6 +40,20 @@ func runEntryPoint() {
   
 */
 func main() {
+
+  /*
+  
+    this is so we can run an initial version of this container making its volumes available
+    to other containers using --volumes-from
+    
+  */
+  quitFlag := os.Getenv(QUIT_IMMEDIATELY_VAR)
+
+  if quitFlag == "yes" {
+    fmt.Fprintln(os.Stdout, "exiting without waiting because WAIT_FOR_WEAVE_QUIT == yes")
+    os.Exit(0)
+  }
+
   if _, err := net.EnsureInterface(WEAVE_INTERFACE_NAME, WAIT_FOR_SECONDS); err != nil {
     a := fmt.Sprint("interface ", WEAVE_INTERFACE_NAME, " not found after ", WAIT_FOR_SECONDS, " seconds")
     fmt.Fprintln(os.Stderr, a)
