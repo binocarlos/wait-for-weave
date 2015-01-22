@@ -10,11 +10,15 @@ wait-for-weave is not designed to be run as a stand alone container.
 
 It is intended to have it's volumes mounted onto another container using `--volumes-from`.
 
-First - run the wait-for-weave container ensuring you provide a `--name` parameter:
+First - run the wait-for-weave container ensuring you provide a `--name` parameter and a `WAIT_FOR_WEAVE_QUIT=yes` environment variable.
 
 ```bash
-$ docker run --name weavetools binocarlos/wait-for-weave
+$ docker run --name weavetools \
+  -e "WAIT_FOR_WEAVE_QUIT=yes" \
+  binocarlos/wait-for-weave /home/weavetools/wait-for-weave
 ```
+
+The `WAIT_FOR_WEAVE_QUIT` variable enables us to run the binary but without waiting - otherwise docker complains that we have no given it a command to run.
 
 Then - you can run another container with a `--volumes-from=weavetools` option.
 
