@@ -10,6 +10,8 @@ import (
 const WEAVE_INTERFACE_NAME = "ethwe"
 const WAIT_FOR_SECONDS = 10
 const QUIT_IMMEDIATELY_VAR = "WAIT_FOR_WEAVE_QUIT"
+// used to test the execution of the entrypoint
+const SKIP_WAIT_FOR_INTERFACE = "WAIT_FOR_WEAVE_SKIP"
 
 /*
 
@@ -22,8 +24,11 @@ const QUIT_IMMEDIATELY_VAR = "WAIT_FOR_WEAVE_QUIT"
 func runEntryPoint() {
   entryPoint := make([]string, len(os.Args))
   copy(entryPoint, os.Args)
-  // remove blocker from args[0]
+  // remove wait-for-weave from args[0]
   entryPoint = append(entryPoint[:0], entryPoint[1:]...)
+  if(len(entryPoint)<=0){
+    os.Exit(0)
+  }
   // get and remove the actual command from args[0]
   commandString := entryPoint[0]
   entryPoint = append(entryPoint[:0], entryPoint[1:]...)
@@ -48,17 +53,24 @@ func main() {
     
   */
   quitFlag := os.Getenv(QUIT_IMMEDIATELY_VAR)
+  skipFlag := os.Getenv(SKIP_WAIT_FOR_INTERFACE)
 
   if quitFlag == "yes" {
     fmt.Fprintln(os.Stdout, "exiting without waiting because WAIT_FOR_WEAVE_QUIT == yes")
     os.Exit(0)
   }
 
-  if _, err := net.EnsureInterface(WEAVE_INTERFACE_NAME, WAIT_FOR_SECONDS); err != nil {
-    a := fmt.Sprint("interface ", WEAVE_INTERFACE_NAME, " not found after ", WAIT_FOR_SECONDS, " seconds")
-    fmt.Fprintln(os.Stderr, a)
-    os.Exit(1)
-  } else {
+  if skipFlag == "yes" {
     runEntryPoint()
+  } else {
+    if _, err := net.EnsureInterface(WEAVE_INTERFACE_NAME, WAIT_FOR_SECONDS); err != nil {
+      a := fmt.Sprint("interface ", WEAVE_INTERFACE_NAME, " not found after ", WAIT_FOR_SECONDS, " seconds")
+      fmt.Fprintln(os.Stderr, a)
+      os.Exit(1)
+    } else {
+      runEntryPoint()
+    }
   }
+
+  
 }
