@@ -56,7 +56,8 @@ func main() {
   skipFlag := os.Getenv(SKIP_WAIT_FOR_INTERFACE)
 
   if quitFlag == "yes" {
-    fmt.Fprintln(os.Stdout, "exiting without waiting because WAIT_FOR_WEAVE_QUIT == yes")
+    // dont print this is looks like an error
+    //fmt.Fprintln(os.Stdout, "exiting without waiting because WAIT_FOR_WEAVE_QUIT == yes")
     os.Exit(0)
   }
 
