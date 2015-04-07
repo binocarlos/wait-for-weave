@@ -2,13 +2,14 @@ package main
 
 import (
   "os"
+  "strconv"
   "os/exec"
   "fmt"
   "github.com/zettio/weave/net"
 )
 
 const WEAVE_INTERFACE_NAME = "ethwe"
-const WAIT_FOR_SECONDS = 10
+
 const QUIT_IMMEDIATELY_VAR = "WAIT_FOR_WEAVE_QUIT"
 // used to test the execution of the entrypoint
 const SKIP_WAIT_FOR_INTERFACE = "WAIT_FOR_WEAVE_SKIP"
@@ -64,6 +65,10 @@ func main() {
   if skipFlag == "yes" {
     runEntryPoint()
   } else {
+    var WAIT_FOR_SECONDS int = 30
+    if len(os.Getenv("WAIT_FOR_SECONDS")) > 0 {
+      WAIT_FOR_SECONDS, _ = strconv.Atoi(os.Getenv("WAIT_FOR_SECONDS"))
+    }
     if _, err := net.EnsureInterface(WEAVE_INTERFACE_NAME, WAIT_FOR_SECONDS); err != nil {
       a := fmt.Sprint("interface ", WEAVE_INTERFACE_NAME, " not found after ", WAIT_FOR_SECONDS, " seconds")
       fmt.Fprintln(os.Stderr, a)
